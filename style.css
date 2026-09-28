@@ -1,0 +1,54 @@
+/* Custom Styles for Anh Khải Shop */
+
+/* Badge Colors matching image designs */
+.badge-pink {
+    background-color: #f43f5e;
+    color: #ffffff;
+}
+
+.badge-blue {
+    background-color: #3b82f6;
+    color: #ffffff;
+}
+
+.badge-purple {
+    background-color: #6366f1;
+    color: #ffffff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Cloudflare Step Item Transitions */
+.cf-step-item.active {
+    background-color: #e0e7ff !important;
+    color: #4f46e5 !important;
+    border-left: 4px solid #4f46e5;
+    font-weight: 700;
+}
+
+/* Product Card Hover Effect */
+.product-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -10px rgba(99, 102, 241, 0.15);
+}

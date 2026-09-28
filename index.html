@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anh Khải Shop - Phong Cách Thời Trang Dẫn Đầu Xu Hướng</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Font: Be Vietnam Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Feather / Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="font-['Be_Vietnam_Pro',sans-serif] bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo Brand -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.showStorefront()">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-indigo-200">
+                    M
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl font-extrabold tracking-tight text-slate-900">Anh Khải Shop</span>
+                    <span id="navAdminBadge" class="hidden px-2.5 py-0.5 text-xs font-bold bg-indigo-600 text-white rounded-full uppercase tracking-wider">ADMIN</span>
+                </div>
+            </div>
+
+            <!-- Main Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                <a href="#trang-chu" onclick="app.showStorefront()" class="px-4 py-2 rounded-xl text-slate-700 font-medium hover:bg-slate-100 hover:text-indigo-600 transition">Trang chủ</a>
+                <a href="#san-pham" onclick="app.showStorefront()" class="px-4 py-2 rounded-xl text-slate-600 font-medium hover:bg-slate-100 hover:text-indigo-600 transition">Sản phẩm</a>
+                <a href="#uu-diem" onclick="app.showStorefront()" class="px-4 py-2 rounded-xl text-slate-600 font-medium hover:bg-slate-100 hover:text-indigo-600 transition">Ưu điểm</a>
+                <a href="#lien-he" onclick="app.showStorefront()" class="px-4 py-2 rounded-xl text-slate-600 font-medium hover:bg-slate-100 hover:text-indigo-600 transition">Liên hệ</a>
+            </nav>
+
+            <!-- Actions Header Right -->
+            <div class="hidden lg:flex items-center space-x-3">
+                <!-- Cart Button -->
+                <button onclick="app.toggleCartDrawer()" class="relative p-2.5 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 rounded-2xl transition flex items-center justify-center">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span id="cartCountBadge" class="absolute -top-1.5 -right-1.5 bg-indigo-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                </button>
+
+                <!-- Admin Button -->
+                <button onclick="app.toggleAdminView()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-2xl shadow-sm transition flex items-center space-x-1.5">
+                    <i data-lucide="shield" class="w-4 h-4"></i>
+                    <span id="adminToggleText">Quản trị</span>
+                </button>
+
+                <!-- User Info & Auth Buttons -->
+                <div id="userAuthContainer" class="flex items-center space-x-2">
+                    <!-- Logged in state injected via JS -->
+                </div>
+
+                <!-- Contact CTA Button -->
+                <a href="#lien-he" onclick="app.showStorefront()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-full shadow-md shadow-indigo-200 transition">
+                    Liên hệ ngay
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <div class="flex items-center space-x-2 md:hidden">
+                <button onclick="app.toggleCartDrawer()" class="relative p-2 bg-slate-100 text-slate-700 rounded-xl">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span id="cartCountMobileBadge" class="absolute -top-1 -right-1 bg-indigo-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+                <button onclick="app.toggleMobileMenu()" class="p-2 text-slate-700 hover:bg-slate-100 rounded-xl focus:outline-none">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu Drawer -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-100 bg-white px-4 pt-3 pb-6 space-y-3 shadow-lg">
+            <a href="#trang-chu" onclick="app.closeMobileMenu(); app.showStorefront();" class="block px-4 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Trang chủ</a>
+            <a href="#san-pham" onclick="app.closeMobileMenu(); app.showStorefront();" class="block px-4 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">Sản phẩm</a>
+            <a href="#uu-diem" onclick="app.closeMobileMenu(); app.showStorefront();" class="block px-4 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">Ưu điểm</a>
+            <a href="#lien-he" onclick="app.closeMobileMenu(); app.showStorefront();" class="block px-4 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">Liên hệ</a>
+            
+            <div class="pt-3 border-t border-slate-100 flex flex-col space-y-2">
+                <button onclick="app.closeMobileMenu(); app.toggleAdminView();" class="w-full py-2.5 bg-indigo-600 text-white font-semibold rounded-xl text-center shadow-sm">
+                    ⚡ Bảng Quản Trị Admin
+                </button>
+                <div id="mobileAuthContainer" class="flex flex-col space-y-2"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- STOREFRONT VIEW -->
+    <main id="storefrontView" class="flex-grow">
+        
+        <!-- HERO SECTION (Matching Image 1) -->
+        <section id="trang-chu" class="relative overflow-hidden py-12 lg:py-20 bg-gradient-to-b from-indigo-50/50 via-white to-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left Hero Text -->
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-xs sm:text-sm font-semibold shadow-xs">
+                            <span>🔥</span>
+                            <span>Bộ sưu tập mới 2026</span>
+                        </div>
+
+                        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight">
+                            Anh Khải Shop - Phong Cách <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Thời Trang</span> Dẫn Đầu Xu Hướng
+                        </h1>
+
+                        <p class="text-slate-600 text-base sm:text-lg max-w-2xl leading-relaxed mx-auto lg:mx-0">
+                            Khám phá bộ sưu tập thời trang mới nhất với thiết kế độc đáo, chất lượng cao cấp và giá cả hợp lý. Tự tin tỏa sáng mỗi ngày cùng Anh Khải Shop.
+                        </p>
+
+                        <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4">
+                            <a href="#san-pham" class="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 transition text-center">
+                                Tìm hiểu thêm
+                            </a>
+                            <a href="#lien-he" class="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-indigo-600 border-2 border-indigo-200 font-bold rounded-2xl transition text-center shadow-xs">
+                                Liên hệ ngay
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Hero Image Card -->
+                    <div class="lg:col-span-5 relative">
+                        <div class="relative mx-auto max-w-md lg:max-w-none">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-3xl blur-xl opacity-30 animate-pulse"></div>
+                            <div class="relative bg-white p-3 rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" 
+                                     alt="Anh Khải Shop Fashion" 
+                                     class="w-full h-[380px] sm:h-[460px] object-cover rounded-2xl transform hover:scale-[1.02] transition duration-500">
+                                <div class="absolute bottom-6 left-6 right-6 p-4 bg-white/90 backdrop-blur-md rounded-2xl border border-white/40 shadow-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Thời Trang Độc Quyền</p>
+                                            <p class="text-sm font-bold text-slate-900">Thiết Kế Phong Cách 2026</p>
+                                        </div>
+                                        <span class="px-3 py-1 bg-indigo-600 text-white font-extrabold text-xs rounded-full">NEW</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURED COLLECTION (Matching Image 3) -->
+        <section id="san-pham" class="py-16 bg-white border-t border-slate-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Section Header -->
+                <div class="text-center space-y-3 mb-10">
+                    <span class="px-4 py-1.5 rounded-full bg-indigo-50 text-indigo-600 text-xs sm:text-sm font-bold inline-block">
+                        Sản phẩm
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                        Bộ Sưu Tập <span class="text-indigo-600">Nổi Bật</span>
+                    </h2>
+                    <p class="text-slate-500 text-sm sm:text-base max-w-xl mx-auto">
+                        Khám phá những sản phẩm thời trang được yêu thích nhất tại Anh Khải Shop
+                    </p>
+                </div>
+
+                <!-- Category Filters & Search Bar -->
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-10">
+                    <!-- Categories Tabs -->
+                    <div class="flex flex-wrap justify-center gap-2" id="categoryFilters">
+                        <button onclick="app.setCategory('all')" data-cat="all" class="cat-btn px-5 py-2.5 rounded-full text-sm font-semibold transition bg-indigo-600 text-white shadow-sm">
+                            Tất cả
+                        </button>
+                        <button onclick="app.setCategory('nam')" data-cat="nam" class="cat-btn px-5 py-2.5 rounded-full text-sm font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+                            Thời trang Nam
+                        </button>
+                        <button onclick="app.setCategory('nu')" data-cat="nu" class="cat-btn px-5 py-2.5 rounded-full text-sm font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+                            Thời trang Nữ
+                        </button>
+                        <button onclick="app.setCategory('phu-kien')" data-cat="phu-kien" class="cat-btn px-5 py-2.5 rounded-full text-sm font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+                            Phụ kiện
+                        </button>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="relative w-full md:w-72">
+                        <i data-lucide="search" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="searchInput" oninput="app.handleSearch(this.value)" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
+                    <!-- Dynamic Product Cards Injected Here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyProducts" class="hidden py-16 text-center">
+                    <i data-lucide="package-open" class="w-16 h-16 mx-auto text-slate-300 mb-3"></i>
+                    <h3 class="text-lg font-bold text-slate-700">Không tìm thấy sản phẩm phù hợp</h3>
+                    <p class="text-slate-400 text-sm">Vui lòng thử tìm kiếm tên sản phẩm khác hoặc thay đổi danh mục.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ADVANTAGES / FEATURES SECTION -->
+        <section id="uu-diem" class="py-16 bg-slate-50 border-t border-slate-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center space-y-3 mb-12">
+                    <span class="px-4 py-1.5 rounded-full bg-indigo-50 text-indigo-600 text-xs sm:text-sm font-bold inline-block">
+                        Vì sao chọn chúng tôi
+                    </span>
+                    <h2 class="text-3xl font-extrabold text-slate-900">
+                        Ưu Điểm Vượt Trội Tại <span class="text-indigo-600">Anh Khải Shop</span>
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center space-y-4 hover:shadow-md transition">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900">Chất Lượng Cao Cấp</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">Tất cả sản phẩm đều được chọn lọc tỉ mỉ, chất liệu vải chuẩn đẹp, đường may tinh tế.</p>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center space-y-4 hover:shadow-md transition">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                            <i data-lucide="truck" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900">Giao Hàng Tận Nơi</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">Đóng gói cẩn thận, hỗ trợ vận chuyển nhanh toàn quốc, kiểm tra hàng trước khi thanh toán.</p>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center space-y-4 hover:shadow-md transition">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                            <i data-lucide="headphones" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900">Tư Vấn Nhiệt Tình</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">Đội ngũ hỗ trợ 24/7 luôn sẵn sàng tư vấn phối đồ và chọn size phù hợp với bạn.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT & ORDER SECTION (Matching Image 4) -->
+        <section id="lien-he" class="py-16 bg-white border-t border-slate-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center space-y-3 mb-12">
+                    <span class="px-4 py-1.5 rounded-full bg-indigo-50 text-indigo-600 text-xs sm:text-sm font-bold inline-block">
+                        Liên hệ & Đặt hàng
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                        Liên Hệ <span class="text-indigo-600">Đặt Hàng Ngay</span>
+                    </h2>
+                    <p class="text-slate-500 text-sm sm:text-base max-w-xl mx-auto">
+                        Hãy để lại thông tin hoặc danh sách giỏ hàng, chúng tôi sẽ liên hệ tư vấn và chốt đơn ngay cho bạn!
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    
+                    <!-- Left Contact Info Cards -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="map-pin" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Địa chỉ</h4>
+                                <p class="text-slate-600 text-sm mt-0.5">Ngọc Thiện - Bắc Ninh</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="mail" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Email</h4>
+                                <p class="text-slate-600 text-sm mt-0.5">Anhkhai0709@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="phone" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Số điện thoại / Zalo</h4>
+                                <p class="text-slate-600 text-sm font-semibold mt-0.5">0981923581</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Order Form -->
+                    <div class="lg:col-span-7 bg-slate-50/70 p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs">
+                        <form id="orderForm" onsubmit="app.handleOrderSubmit(event)" class="space-y-4">
+                            
+                            <div>
+                                <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">Họ và tên <span class="text-red-500">*</span></label>
+                                <input type="text" id="orderName" required placeholder="Nhập họ và tên" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">Số điện thoại <span class="text-red-500">*</span></label>
+                                <input type="tel" id="orderPhone" required placeholder="Nhập số điện thoại" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">Địa chỉ giao hàng <span class="text-red-500">*</span></label>
+                                <input type="text" id="orderAddress" required placeholder="Nhập địa chỉ nhận hàng (Số nhà, đường, xã/phường, tỉnh/thành)" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">Email (Không bắt buộc)</label>
+                                <input type="email" id="orderEmail" placeholder="Nhập email" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">Nội dung / Ghi chú đơn hàng</label>
+                                <textarea id="orderNotes" rows="3" placeholder="Nhập ghi chú đơn hàng hoặc câu hỏi của bạn" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 transition text-sm sm:text-base flex items-center justify-center space-x-2">
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                                <span>Gửi Đơn Hàng Ngay</span>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ADMIN PANEL VIEW (Matching Image 2 & Image 5) -->
+    <main id="adminView" class="hidden flex-grow py-8 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            
+            <!-- Admin Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Bảng Quản Trị Hệ Thống</h1>
+                    <p class="text-slate-500 text-xs sm:text-sm mt-1">Quản lý Sản phẩm, Duyệt đơn hàng, Ảnh tải lên Cloudflare R2 và Cơ sở dữ liệu D1 SQLite</p>
+                </div>
+                <button onclick="app.openAddProductModal()" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-2xl shadow-md shadow-indigo-200 transition flex items-center justify-center space-x-2">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                    <span>+ Thêm Sản Phẩm Mới</span>
+                </button>
+            </div>
+
+            <!-- Admin Navigation Tabs -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-2">
+                <button onclick="app.setAdminTab('products')" id="tabBtnProducts" class="px-5 py-2.5 rounded-full font-bold text-sm transition bg-indigo-600 text-white shadow-sm">
+                    Sản phẩm (<span id="adminProductCount">0</span>)
+                </button>
+                <button onclick="app.setAdminTab('orders')" id="tabBtnOrders" class="px-5 py-2.5 rounded-full font-bold text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300">
+                    Duyệt Đơn Hàng (<span id="adminOrderCount">0</span>)
+                </button>
+                <button onclick="app.setAdminTab('system')" id="tabBtnSystem" class="px-5 py-2.5 rounded-full font-bold text-sm transition bg-slate-200 text-slate-700 hover:bg-slate-300">
+                    Hệ Thống (Cloudflare Worker/D1/R2)
+                </button>
+            </div>
+
+            <!-- TAB 1: PRODUCTS TABLE (Matching Image 2) -->
+            <div id="adminTabProducts" class="bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-xs">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                                <th class="py-4 px-6">Ảnh</th>
+                                <th class="py-4 px-6">Tên Sản Phẩm</th>
+                                <th class="py-4 px-6">Danh Mục</th>
+                                <th class="py-4 px-6">Giá Bán</th>
+                                <th class="py-4 px-6">Huy Hiệu</th>
+                                <th class="py-4 px-6 text-right">Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductsTableBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: ORDERS MANAGEMENT -->
+            <div id="adminTabOrders" class="hidden bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-xs">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                                <th class="py-4 px-6">Mã Đơn</th>
+                                <th class="py-4 px-6">Khách Hàng</th>
+                                <th class="py-4 px-6">SĐT / Địa Chỉ</th>
+                                <th class="py-4 px-6">Tổng Tiền</th>
+                                <th class="py-4 px-6">Trạng Thái</th>
+                                <th class="py-4 px-6 text-right">Duyệt Đơn</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrdersTableBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 3: SYSTEM DEPLOYMENT GUIDE (Matching Image 5) -->
+            <div id="adminTabSystem" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Menu Steps (Matching Image 5) -->
+                <div class="lg:col-span-4 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
+                    <h3 class="font-extrabold text-slate-900 border-b pb-3 mb-2 flex items-center justify-between">
+                        <span>Hướng dẫn Cloudflare</span>
+                        <span class="text-xs bg-indigo-100 text-indigo-600 px-2.5 py-1 rounded-full">D1 & R2</span>
+                    </h3>
+                    <ul class="space-y-2 text-sm font-semibold" id="cloudflareStepsList">
+                        <li onclick="app.showCloudflareStep(1)" class="cf-step-item active p-3 rounded-2xl cursor-pointer bg-indigo-50 text-indigo-600 flex items-center justify-between">
+                            <span>1. Tạo database D1</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </li>
+                        <li onclick="app.showCloudflareStep(2)" class="cf-step-item p-3 rounded-2xl cursor-pointer hover:bg-slate-50 text-slate-600 flex items-center justify-between">
+                            <span>2. Lấy Database ID</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </li>
+                        <li onclick="app.showCloudflareStep(3)" class="cf-step-item p-3 rounded-2xl cursor-pointer hover:bg-slate-50 text-slate-600 flex items-center justify-between">
+                            <span>3. Cấu hình D1 Binding</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </li>
+                        <li onclick="app.showCloudflareStep(4)" class="cf-step-item p-3 rounded-2xl cursor-pointer hover:bg-slate-50 text-slate-600 flex items-center justify-between">
+                            <span>4. Tạo bảng bằng Migration</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </li>
+                        <li onclick="app.showCloudflareStep(5)" class="cf-step-item p-3 rounded-2xl cursor-pointer hover:bg-slate-50 text-slate-600 flex items-center justify-between">
+                            <span>5. Kết nối Worker với D1</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </li>
+                        <li onclick="app.showCloudflareStep(6)" class="cf-step-item p-3 rounded-2xl cursor-pointer hover:bg-slate-50 text-slate-600 flex items-center justify-between">
+                            <span>6. Kiểm tra dữ liệu</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </li>
+                        <li onclick="app.showCloudflareStep(7)" class="cf-step-item p-3 rounded-2xl cursor-pointer hover:bg-slate-50 text-slate-600 flex items-center justify-between">
+                            <span>7. Build và Deploy</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Right Step Details Box -->
+                <div class="lg:col-span-8 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs space-y-6">
+                    <div id="stepDetailContent">
+                        <!-- Dynamic step guide content loaded via JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="space-y-4">
+                <div class="flex items-center space-x-2 text-white font-bold text-xl">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white">M</div>
+                    <span>Anh Khải Shop</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Hệ thống bán hàng thời trang hiện đại chạy trên Cloudflare Pages, sử dụng Cloudflare Worker, D1 SQLite và R2 Storage.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-sm mb-3">Danh Mục</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#san-pham" onclick="app.setCategory('nam')" class="hover:text-white transition">Thời trang Nam</a></li>
+                    <li><a href="#san-pham" onclick="app.setCategory('nu')" class="hover:text-white transition">Thời trang Nữ</a></li>
+                    <li><a href="#san-pham" onclick="app.setCategory('phu-kien')" class="hover:text-white transition">Phụ kiện</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-sm mb-3">Thông Tin Liên Hệ</h4>
+                <ul class="space-y-2 text-xs">
+                    <li>📍 Ngọc Thiện - Bắc Ninh</li>
+                    <li>📞 Hotline: 0981923581</li>
+                    <li>✉️ Anhkhai0709@gmail.com</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-sm mb-3">Hệ Thống</h4>
+                <p class="text-xs text-slate-400 mb-3">Tích hợp Cloudflare Worker, D1 Database và R2 Object Storage</p>
+                <div class="inline-flex items-center space-x-2 px-3 py-1 bg-slate-800 rounded-full text-indigo-400 text-xs font-semibold">
+                    <span>⚡ Cloudflare Pages Ready</span>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-slate-800 text-center text-xs">
+            © 2026 Anh Khải Shop. All rights reserved. Designed for Cloudflare Pages Deployment.
+        </div>
+    </footer>
+
+    <!-- SHOPPING CART DRAWER / MODAL -->
+    <div id="cartDrawerOverlay" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 transition-opacity">
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+                <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="shopping-bag" class="w-6 h-6 text-indigo-600"></i>
+                        <h3 class="text-lg font-extrabold text-slate-900">Giỏ Hàng Của Bạn</h3>
+                    </div>
+                    <button onclick="app.toggleCartDrawer()" class="p-2 text-slate-400 hover:text-slate-600 rounded-xl">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Items Container -->
+                <div id="cartDrawerBody" class="flex-grow p-6 overflow-y-auto space-y-4">
+                    <!-- Injected via JS -->
+                </div>
+
+                <!-- Cart Footer -->
+                <div class="p-6 border-t border-slate-100 space-y-4 bg-slate-50">
+                    <div class="flex items-center justify-between text-base font-extrabold text-slate-900">
+                        <span>Tổng tiền:</span>
+                        <span id="cartDrawerTotal" class="text-indigo-600 text-xl">0đ</span>
+                    </div>
+
+                    <!-- Order login gate notice if not logged in -->
+                    <div id="cartLoginNotice" class="hidden p-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold rounded-xl text-center">
+                        ⚠️ Bạn cần <button onclick="app.openAuthModal()" class="underline font-bold text-amber-900">Đăng nhập</button> để hoàn tất mua hàng!
+                    </div>
+
+                    <button onclick="app.proceedCheckoutFromCart()" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 transition text-center flex items-center justify-center space-x-2">
+                        <span>Tiến Hành Đặt Hàng</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTH MODAL (LOGIN / REGISTER) -->
+    <div id="authModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden relative">
+            <button onclick="app.closeAuthModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-xl">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div class="p-6 text-center border-b border-slate-100 bg-slate-50/50">
+                <h3 id="authModalTitle" class="text-2xl font-extrabold text-slate-900">Đăng Nhập Khách Hàng</h3>
+                <p class="text-slate-500 text-xs mt-1">Đăng nhập hoặc tạo tài khoản để thực hiện mua hàng</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="app.handleLogin(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Tên đăng nhập</label>
+                    <input type="text" id="loginUsername" required placeholder="Nhập tên đăng nhập (vd: anhkhaishop)" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu</label>
+                    <input type="password" id="loginPassword" required placeholder="Nhập mật khẩu" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md shadow-indigo-200 transition text-sm">
+                    Đăng Nhập
+                </button>
+                <div class="text-center pt-2">
+                    <button type="button" onclick="app.switchAuthMode('register')" class="text-xs font-bold text-indigo-600 hover:underline">
+                        Chưa có tài khoản? Đăng ký ngay
+                    </button>
+                </div>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" onsubmit="app.handleRegister(event)" class="hidden p-6 space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Họ và tên *</label>
+                    <input type="text" id="regFullName" required placeholder="Nhập họ và tên" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Tên đăng nhập *</label>
+                    <input type="text" id="regUsername" required placeholder="Nhập tên đăng nhập" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Email *</label>
+                    <input type="email" id="regEmail" required placeholder="Nhập email" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu *</label>
+                    <input type="password" id="regPassword" required placeholder="Nhập mật khẩu" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md shadow-indigo-200 transition text-sm">
+                    Đăng Ký Tài Khoản
+                </button>
+                <div class="text-center pt-1">
+                    <button type="button" onclick="app.switchAuthMode('login')" class="text-xs font-bold text-indigo-600 hover:underline">
+                        Đã có tài khoản? Đăng nhập
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD PRODUCT MODAL (ADMIN) -->
+    <div id="addProductModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden relative my-8">
+            <button onclick="app.closeAddProductModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-xl">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div class="p-6 border-b border-slate-100 bg-slate-50">
+                <h3 class="text-xl font-extrabold text-slate-900">+ Thêm Sản Phẩm Mới</h3>
+                <p class="text-slate-500 text-xs mt-0.5">Tải hình ảnh trực tiếp lên Cloudflare R2 & lưu thông tin vào D1 SQLite</p>
+            </div>
+
+            <form id="addProductForm" onsubmit="app.handleAddProductSubmit(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Tên Sản Phẩm *</label>
+                    <input type="text" id="newProdName" required placeholder="Ví dụ: áo hoàng gia" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Danh Mục *</label>
+                        <select id="newProdCat" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                            <option value="nam">Thời trang Nam (nam)</option>
+                            <option value="nu">Thời trang Nữ (nu)</option>
+                            <option value="phu-kien">Phụ kiện (phu-kien)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Huy Hiệu (Badge)</label>
+                        <select id="newProdBadge" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                            <option value="Hot">Hot (Hồng)</option>
+                            <option value="Mới">Mới (Xanh)</option>
+                            <option value="Giảm giá">Giảm giá (Tím)</option>
+                            <option value="">Không có</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Giá Bán (VNĐ) *</label>
+                    <input type="number" id="newProdPrice" required placeholder="Ví dụ: 120000" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Ảnh Tải Lên (Tải lên Cloudflare R2 Bucket)</label>
+                    <input type="file" id="newProdImageFile" accept="image/*" onchange="app.handleImageFileSelect(event)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+                    <p class="text-[11px] text-slate-400 mt-1">Hoặc dán URL ảnh trực tiếp bên dưới:</p>
+                    <input type="url" id="newProdImageUrl" placeholder="https://..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm mt-1">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Mô Tả Sản Phẩm</label>
+                    <textarea id="newProdDesc" rows="3" placeholder="Nhập mô tả sản phẩm..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></textarea>
+                </div>
+
+                <div class="pt-2 flex justify-end space-x-3">
+                    <button type="button" onclick="app.closeAddProductModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-sm">Hủy</button>
+                    <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md shadow-indigo-200 transition text-sm">Lưu Sản Phẩm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main JavaScript App Logic -->
+    <script src="app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
